@@ -12,6 +12,7 @@ use App\Http\Controllers\admin\TermsController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\employee\EmpDashboard;
+use App\Http\Controllers\employee\ExpenseController as EmployeeExpenseController;
 use App\Http\Controllers\web\HomePageController;
 use App\Http\Controllers\web\PagesController;
 use App\Http\Middleware\EmployeeGuard;
@@ -144,6 +145,10 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
 Route::prefix('/employee')->name('employee.')->middleware([EmployeeGuard::class])->group(function() {
     Route::get('/dashboard', [EmpDashboard::class, 'index'])->name('dashboard');
 
+    // EXPENSE MANAGEMENT
+    Route::get('/expenses', [EmployeeExpenseController::class, 'index'])->name('expense.index');
+    Route::get('/expense/create', [EmployeeExpenseController::class, 'create'])->name('expense.create');
+    Route::post('/expense/store', [EmployeeExpenseController::class, 'store'])->name('expense.store');
 });
 
 
