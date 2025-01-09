@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\PackageController;
 use App\Http\Controllers\admin\PackageRequestController;
 use App\Http\Controllers\admin\SliderController;
 use App\Http\Controllers\admin\TermsController;
+use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\web\HomePageController;
 use App\Http\Controllers\web\PagesController;
@@ -99,6 +100,14 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::get('/custom-form-data', [CustomFromController::class, 'index'])->name('customform.index');
     Route::get('/custom-form-data/delete/{id}', [CustomFromController::class, 'delete'])->name('customform.delete');
     Route::post('/custom-form-update', [CustomFromController::class, 'update'])->name('customform.update');
+
+    // USER MANAGEMENT
+    Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
+    Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
+    Route::get('/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
 });
 
 
