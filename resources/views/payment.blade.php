@@ -25,10 +25,12 @@
         <div class="row mt-5 pt-5 pb-5 mb-5">
             <div class="col-md-12">
                 {{-- <img src="{{ asset('assets/website/images/bkash_payment_logo.png') }}" alt="bkash-payment" class="img-fluid" style="max-width: 250px"> --}}
+                <p class="h5">আপনি বিকাশ অথবা নগদ অ্যাপের "পে বিল" অপশন থেকে সহজেই পেমেন্ট করতে পারবেন।</p>
+                <p>অথবা</p>
                 <p class="mt-3">
                     নিচের অংশে আপনার ক্লায়েন্ট ID দিয়ে "PAY BILL" বাটনে ক্লিক করুন <br>
                     বিকাশের পেমেন্টের মাধ্যমে খুব সহজেই আপনার ইন্টারনেট বিল পেমেন্ট করুন! <br>
-                    পেমেন্ট সংক্রান্ত যে কোন সমস্যার জন্যে আমাদের <a href="/"
+                    পেমেন্ট সংক্রান্ত যে কোন সমস্যার জন্যে আমাদের <a href="https://wa.me/+88001722272781?text=Hi, I need help with my payment"
                         class="text-info text-underline">সাপোর্টে</a> যোগাযোগ করুন।
                 </p>
                 <p></p>

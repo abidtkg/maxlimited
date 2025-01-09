@@ -5,7 +5,8 @@
                 style="height: auto; width: 70%;">
             <div class="pt-2">
                 <p class="text-muted m-0">contact@maxlimited.net</p>
-                <a class="text-muted m-0" href="tel:+8801722272781">+88 01722272781</a>
+                <a class="text-info" href="tel:+8809639005330">+88 09639005330</a>
+                <a class="text-info m-0" href="tel:+8801722272781">+88 01722272781</a>
             </div>
         </div>
         <!-- <div class="col-12 col-md-6 col-lg-3 grid-margin">

@@ -86,7 +86,7 @@
             </div>
         </div>
 
-        <section class="service-area-sc bg-white py-5 pt-5 pb-5 mb-5 container">
+        <section class="service-area-sc bg-white py-5 pt-5 pb-5 mb-5 container font-bn">
             @if ($notice)
                 <marquee class="marque-text">
                     {{ $notice->value }}
@@ -94,7 +94,7 @@
             @endif
             <h2 class="title_service">SERVICES</h2>
 
-            <div class="service-content-warper">
+            <div class="service-content-warper mb-5">
                 <div class="row">
                     <div class="col-4 col-xl-2 mt-4">
                         <a href="https://customer.maxlimited.net/customer/login.php" class="service-content-cart">
@@ -113,7 +113,7 @@
                         </a>
                     </div>
                     <div class="col-4 col-xl-2 mt-4">
-                        <a href="/free-wifi" class="service-content-cart">
+                        <a href="{{ route('web.freewifi') }}" class="service-content-cart">
                             <div class="img-content">
                                 <img class="ms-2" src="{{ asset('assets/website/images/wifi_2_jellvt.png') }}"
                                     alt="Free WiFi">
@@ -143,16 +143,6 @@
                                 <img class="ms-2" src="{{ asset('assets/website/images/router.png') }}" alt="Free WiFi">
                             </div>
                             <div class="text-center px-2 text">New Connection </div>
-                        </a>
-                    </div>
-                    <div class="col-4 col-xl-2 mt-4">
-                        <a href="https://monitor.tnrsoft.com/?route=publicpage&key=vpJjSr77JZfmpoYtuU"
-                            class="service-content-cart">
-                            <div class="img-content">
-                                <img class="ms-2" src="{{ asset('assets/website/images/server-error.png') }}"
-                                    alt="Shifting">
-                            </div>
-                            <div class="text-center px-2 text">Server Checking</div>
                         </a>
                     </div>
                     <div class="col-4 col-xl-2 mt-4">
@@ -199,12 +189,12 @@
                         </a>
                     </div>
                     <div class="col-4 col-xl-2 mt-4">
-                        <a href="https://join.maxlimited.net/memberlogin" target="_blank" class="service-content-cart">
+                        <a href="{{ route('login') }}" class="service-content-cart">
                             <div class="img-content">
-                                <img src="{{ asset('assets/website/images/deilyiwhwt3dtsxtpvrr.png') }}"
+                                <img src="{{ asset('assets/website/images/account-protection.png') }}"
                                     alt="Somity Hisab">
                             </div>
-                            <div class="text-center px-2 text">Somity Hisab</div>
+                            <div class="text-center px-2 text">Panel Login</div>
                         </a>
                     </div>
                 </div>

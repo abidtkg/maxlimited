@@ -51,6 +51,11 @@ class PagesController extends Controller
         return view('request', compact('upozilas', 'packages'));
     }
 
+    public function free_wifi()
+    {
+        return view('free-wifi');
+    }
+
     public function connReqSubmit(Request $request)
     {
         $request->validate(

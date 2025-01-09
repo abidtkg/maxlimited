@@ -24,6 +24,12 @@
     <meta property="og:image" content="{{ asset('assets/website/assets/images/maxspeed.png') }}" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    {{-- <link href="https://fonts.maateen.me/kalpurush/font.css" rel="stylesheet">
+    <style>
+        .font-bn {
+            font-family: 'Kalpurush', Arial, sans-serif !important;
+        }
+    </style> --}}
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JW33YEVCKF"></script>

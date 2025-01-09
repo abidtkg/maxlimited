@@ -10,8 +10,10 @@ use App\Http\Controllers\admin\SliderController;
 use App\Http\Controllers\admin\TermsController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\employee\EmpDashboard;
 use App\Http\Controllers\web\HomePageController;
 use App\Http\Controllers\web\PagesController;
+use App\Http\Middleware\EmployeeGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +40,7 @@ Route::post('/connection-request/create', [PagesController::class, 'connReqSubmi
 Route::get('/privacy', [PagesController::class, 'privacy_policy'])->name('policy.privacy');
 Route::get('/refund-policy', [PagesController::class, 'refund_policy'])->name('policy.refund');
 Route::get('/about', [PagesController::class, 'about'])->name('aboutus');
+Route::get('/free-wifi', [PagesController::class, 'free_wifi'])->name('web.freewifi');
 
 // CUSTOM FORM
 Route::get('/tv', [PagesController::class, 'custom_form_view'])->name('customform.create');
@@ -46,6 +49,20 @@ Route::post('/custom-form/store', [PagesController::class, 'custom_form_store'])
 Route::get('/admin', function() {
     return redirect()->route('admin.dashboard');
 });
+
+// AUTH LANDING AND REDIRECTS
+Route::get('/auth_land', function() {
+    if (Auth::user()) {
+        if (Auth::user()->user_type == 'admin') {
+            return redirect()->route('admin.dashboard');
+        }else {
+            return redirect()->route('employee.dashboard');
+        }
+    }else {
+        Auth::logout();
+        return redirect()->route('login');
+    }
+})->name('auth.land');
 
 // ADMIN ROUTES
 Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function () {
@@ -108,6 +125,12 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
     Route::get('/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+});
+
+// EMPLOYEE ROUTES
+Route::prefix('/employee')->name('employee.')->middleware([EmployeeGuard::class])->group(function() {
+    Route::get('/dashboard', [EmpDashboard::class, 'index'])->name('dashboard');
+
 });
 
 
