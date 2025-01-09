@@ -113,6 +113,14 @@
                             <span class="hide-menu">Users</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('admin.expense.category.index') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-git-branch"></i>
+                            </span>
+                            <span class="hide-menu">Expense Category</span>
+                        </a>
+                    </li>
                 @endif
 
                 @if(Auth::user()->user_type == 'employee')

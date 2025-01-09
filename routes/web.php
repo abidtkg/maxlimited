@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\CustomFromController;
+use App\Http\Controllers\admin\ExpenseController;
 use App\Http\Controllers\admin\FtpController;
 use App\Http\Controllers\admin\LocationController;
 use App\Http\Controllers\admin\NoticeController;
@@ -125,6 +126,12 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::get('/user/edit/{id}', [UserController::class, 'edit'])->name('user.edit');
     Route::post('/user/update', [UserController::class, 'update'])->name('user.update');
     Route::get('/user/delete/{id}', [UserController::class, 'delete'])->name('user.delete');
+
+    // CATEGORY MANAGEMENT
+    Route::get('/expense-category', [ExpenseController::class, 'expense_categories'])->name('expense.category.index');
+    Route::post('/expense-category/store', [ExpenseController::class, 'expense_category_store'])->name('expense.category.store');
+    Route::get('/expense-category/edit/{id}', [ExpenseController::class, 'expense_category_edit'])->name('expense.category.edit');
+    Route::post('/expense-category/update', [ExpenseController::class, 'expense_category_update'])->name('expense.category.update');
 });
 
 // EMPLOYEE ROUTES
