@@ -137,7 +137,7 @@
                     <span class="hide-menu">EMPLOYEE</span>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('employee.dashboard') }}" aria-expanded="false">
+                    <a class="sidebar-link {{ request()->routeIs('employee.dashboard') ? 'active' : '' }}" href="{{ route('employee.dashboard') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-layout-dashboard"></i>
                         </span>
@@ -145,7 +145,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ route('employee.expense.index') }}" aria-expanded="false">
+                    <a class="sidebar-link {{ request()->routeIs('employee.expense*') ? 'active' : '' }}" href="{{ route('employee.expense.index') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-currency-dollar"></i>
                         </span>

@@ -42,7 +42,7 @@
                     </div>
                     <div class="col-md-2">
                         <label for=""></label>
-                        <button class="btn btn-info mt-2">Submit</button>
+                        <button class="btn btn-info mt-2">Submit & Filter</button>
                     </div>
                     <div class="col-md-2">
                         <label for=""></label>
@@ -56,7 +56,6 @@
                 </div>
             </form>
         </div>
-        
     </div>
 </div>
 <div class="card mt-3">

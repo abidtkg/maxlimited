@@ -3,9 +3,48 @@
 @section('dashboard-content')
 <div class="row">
     <div class="col-12">
-        <a href="{{ route('employee.expense.create') }}" class="btn btn-info float-end">
-            ADD EXPENSE
-        </a>
+        <div class="row">
+            <form class="col-md-12" action="" method="get">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="category" class="form-label">Category</label>
+                            <select id="category" class="form-control" name="expense_category_id">
+                                <option value="">Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request()->get('expense_category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="datetime-local" name="start_date" id="start_date" class="form-control" value="{{ request()->get('start_date') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="datetime-local" name="end_date" id="end_date" class="form-control" value="{{ request()->get('end_date') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for=""></label>
+                        <button class="btn btn-info mt-2">Submit & Filter</button>
+                    </div>
+                    <div class="col-md-2">
+                        <label for=""></label>
+                        <button class="btn btn-dark mt-2" name="print" value="yes">Submit & Print</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="{{ route('employee.expense.create') }}" class="btn btn-info mt-2">
+                            ADD EXPENSE
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <div class="card mt-3">

@@ -26,8 +26,6 @@ class ExpenseController extends Controller
             $expenses = $expenses->get();  // Get all results without pagination
             return view('admin.expense.print', compact('expenses'));
         }
-
-        
     }
 
     public function create()
