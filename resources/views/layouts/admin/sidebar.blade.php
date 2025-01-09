@@ -17,7 +17,7 @@
                 @if (Auth::user()->user_type == 'admin')
                     <li class="nav-small-cap">
                         <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-                        <span class="hide-menu">FEATURES</span>
+                        <span class="hide-menu">ADMIN PORTAL</span>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('admin.dashboard') }}" aria-expanded="false">
@@ -25,6 +25,14 @@
                                 <i class="ti ti-layout-dashboard"></i>
                             </span>
                             <span class="hide-menu">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ route('admin.expense.index') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-currency-taka"></i>
+                            </span>
+                            <span class="hide-menu">Expenses</span>
                         </a>
                     </li>
                     {{-- con.req.index --}}

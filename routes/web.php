@@ -132,6 +132,12 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::post('/expense-category/store', [ExpenseController::class, 'expense_category_store'])->name('expense.category.store');
     Route::get('/expense-category/edit/{id}', [ExpenseController::class, 'expense_category_edit'])->name('expense.category.edit');
     Route::post('/expense-category/update', [ExpenseController::class, 'expense_category_update'])->name('expense.category.update');
+
+    // EXPENSE MANAGEMENT
+    Route::get('/expenses', [ExpenseController::class, 'expenses'])->name('expense.index');
+    Route::get('/expense/create', [ExpenseController::class, 'create'])->name('expense.create');
+    Route::post('/expense/store', [ExpenseController::class, 'store'])->name('expense.store');
+    Route::get('/expense/delete/{id}', [ExpenseController::class, 'delete'])->name('expense.delete');
 });
 
 // EMPLOYEE ROUTES
