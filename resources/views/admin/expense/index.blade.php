@@ -3,9 +3,60 @@
 @section('dashboard-content')
 <div class="row">
     <div class="col-12">
-        <a href="{{ route('admin.expense.create') }}" class="btn btn-info float-end">
-            ADD EXPENSE
-        </a>
+        <div class="row">
+            <form class="col-md-12" action="" method="get">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="category" class="form-label">Category</label>
+                            <select id="category" class="form-control" name="expense_category_id">
+                                <option value="">Select Category</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}" {{ request()->get('expense_category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="users" class="form-label">Employee</label>
+                            <select id="users" name="user_id" class="form-control">
+                                <option value="">Select Employee</option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}" {{ request()->get('user_id') == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="start_date" class="form-label">Start Date</label>
+                            <input type="datetime-local" name="start_date" id="start_date" class="form-control" value="{{ request()->get('start_date') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="end_date" class="form-label">End Date</label>
+                            <input type="datetime-local" name="end_date" id="end_date" class="form-control" value="{{ request()->get('end_date') }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label for=""></label>
+                        <button class="btn btn-info mt-2">Submit</button>
+                    </div>
+                    <div class="col-md-2">
+                        <label for=""></label>
+                        <button class="btn btn-dark mt-2" name="print" value="yes">Submit & Print</button>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="{{ route('admin.expense.create') }}" class="btn btn-info mt-2">
+                            ADD EXPENSE
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
     </div>
 </div>
 <div class="card mt-3">
@@ -44,7 +95,11 @@
                 </tbody>
             </table>
         </div>
-        
+        @if($expenses->hasPages())
+            <div class="pagination-wrapper">
+                {{ $expenses->links('pagination::bootstrap-5') }}
+            </div>
+        @endif
     </div>
 </div>
 

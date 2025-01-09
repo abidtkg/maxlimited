@@ -12,8 +12,22 @@ class ExpenseController extends Controller
 {
     public function expenses()
     {
-        $expenses = Expense::latest()->paginate(50);
-        return view('admin.expense.index', compact('expenses'));
+        $expenses = Expense::latest()
+        ->when(request('expense_category_id'), fn($query) => $query->where('expense_category_id', request('expense_category_id')))
+        ->when(request('user_id'), fn($query) => $query->where('user_id', request('user_id')))
+        ->when(request('start_date'), fn($query) => $query->where('created_at', '>=', request('start_date')))
+        ->when(request('end_date'), fn($query) => $query->where('created_at', '<=', request('end_date')));
+        if (request('print') !== 'yes') {
+            $expenses = $expenses->paginate(50);
+            $categories = ExpenseCategory::latest()->get();
+            $users = User::whereIn('user_type', ['employee', 'admin'])->latest()->get();
+            return view('admin.expense.index', compact('expenses', 'categories', 'users'));
+        } else {
+            $expenses = $expenses->get();  // Get all results without pagination
+            return view('admin.expense.print', compact('expenses'));
+        }
+
+        
     }
 
     public function create()
