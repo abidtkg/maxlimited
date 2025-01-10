@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\LocationController;
 use App\Http\Controllers\admin\NoticeController;
 use App\Http\Controllers\admin\PackageController;
 use App\Http\Controllers\admin\PackageRequestController;
+use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\SliderController;
 use App\Http\Controllers\admin\TermsController;
 use App\Http\Controllers\admin\UserController;
@@ -139,6 +140,17 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::get('/expense/create', [ExpenseController::class, 'create'])->name('expense.create');
     Route::post('/expense/store', [ExpenseController::class, 'store'])->name('expense.store');
     Route::get('/expense/delete/{id}', [ExpenseController::class, 'delete'])->name('expense.delete');
+
+    // MANAGE ZONES
+    Route::get('/zones', [ProductController::class, 'zones'])->name('zone.index');
+    Route::post('/zone/store', [ProductController::class, 'zone_store'])->name('zone.store');
+
+    // PRDOUCT MANAGEMENT
+    Route::get('/products', [ProductController::class, 'products'])->name('product.index');
+    Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
+    Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
+    Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::post('/product/update', [ProductController::class, 'update'])->name('product.update');
 });
 
 // EMPLOYEE ROUTES

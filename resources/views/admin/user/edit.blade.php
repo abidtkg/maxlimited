@@ -19,6 +19,24 @@
                             @enderror
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" name="phone"
+                                class="form-control  @error('phone') is-invalid @enderror"
+                                value="{{ old('phone') ? old('phone') : $user->phone }}" id="phone">
+                            @error('phone')
+                                <span class="text-danger"> {{ $message }} </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" name="address"
+                                class="form-control  @error('address') is-invalid @enderror"
+                                value="{{ old('address') ? old('address') : $user->address }}" id="address">
+                            @error('address')
+                                <span class="text-danger"> {{ $message }} </span>
+                            @enderror
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" name="email"
                                 class="form-control @error('email') is-invalid @enderror" id="email"

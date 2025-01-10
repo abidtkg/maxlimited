@@ -28,11 +28,19 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ route('admin.expense.index') }}" aria-expanded="false">
+                        <a class="sidebar-link {{ request()->routeIs('admin.expense*') ? 'active' : '' }}" href="{{ route('admin.expense.index') }}" aria-expanded="false">
                             <span>
                                 <i class="ti ti-currency-taka"></i>
                             </span>
                             <span class="hide-menu">Expenses</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link {{ request()->routeIs('admin.product*') ? 'active' : '' }}" href="{{ route('admin.product.index') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-ticket"></i>
+                            </span>
+                            <span class="hide-menu">Product</span>
                         </a>
                     </li>
                     {{-- con.req.index --}}
@@ -114,7 +122,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ route('admin.user.index') }}" aria-expanded="false">
+                        <a class="sidebar-link {{ request()->routeIs('admin.user*') ? 'active' : '' }}" href="{{ route('admin.user.index') }}" aria-expanded="false">
                             <span>
                                 <i class="ti ti-users"></i>
                             </span>
@@ -127,6 +135,14 @@
                                 <i class="ti ti-git-branch"></i>
                             </span>
                             <span class="hide-menu">Expense Category</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link {{ request()->routeIs('admin.zone*') ? 'active' : '' }}" href="{{ route('admin.zone.index') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-circles"></i>
+                            </span>
+                            <span class="hide-menu">Zones</span>
                         </a>
                     </li>
                 @endif

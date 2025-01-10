@@ -26,6 +26,8 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,$request->email',
+            'phone' => 'required|string|max:12',
+            'address' => 'required|string|max:255',
             'password' => 'required|string|max:16|min:6',
             'role' => 'required|string|max:255'
         ]);
@@ -36,6 +38,8 @@ class UserController extends Controller
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
                 'user_type' => $request->role,
                 'password' => $hashedPassword
             ]);
@@ -56,6 +60,8 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
+            'phone' => 'required|string|max:12',
+            'address' => 'required|string|max:255',
             'role' => 'required|string|max:255',
             'password' => 'nullable|string|max:16|min:6'
         ]);
@@ -70,6 +76,8 @@ class UserController extends Controller
             User::where('id', $request->id)->update([
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
                 'user_type' => $request->role
             ]);
             return redirect()->route('admin.user.index')->with('success', 'User has updated!');
