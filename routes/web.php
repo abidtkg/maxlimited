@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\NoticeController;
 use App\Http\Controllers\admin\PackageController;
 use App\Http\Controllers\admin\PackageRequestController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\PurchaseController;
 use App\Http\Controllers\admin\SliderController;
 use App\Http\Controllers\admin\TermsController;
 use App\Http\Controllers\admin\UserController;
@@ -151,6 +152,12 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::post('/product/store', [ProductController::class, 'store'])->name('product.store');
     Route::get('/product/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('/product/update', [ProductController::class, 'update'])->name('product.update');
+
+    // PURCHASE MANAGEMENT
+    Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
+    Route::get('/purchase/create', [PurchaseController::class, 'create'])->name('purchase.create');
+    Route::post('/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
+    Route::get('/purchase/view/{id}', [PurchaseController::class, 'show'])->name('purchase.show');
 });
 
 // EMPLOYEE ROUTES

@@ -43,6 +43,14 @@
                             <span class="hide-menu">Product</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link {{ request()->routeIs('admin.purchase*') ? 'active' : '' }}" href="{{ route('admin.purchase.index') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-arrow-up"></i>
+                            </span>
+                            <span class="hide-menu">Purchase</span>
+                        </a>
+                    </li>
                     {{-- con.req.index --}}
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ route('admin.con.req.index') }}" aria-expanded="false">

@@ -40,7 +40,6 @@ class ProductController extends Controller
             ]);
             return redirect()->route('admin.product.index')->with('success', 'Product has created!');
         }catch(Exception $e){
-            dd($e);
             return back()->with('error', 'Something went wrong!');
         }
     }
@@ -97,7 +96,7 @@ class ProductController extends Controller
                 'address' => $request->address,
                 'phone' => $request->phone
             ]);
-            return redirect()->route('admin.product.zones')->with('success', 'Zone has created!');
+            return redirect()->route('admin.zone.index')->with('success', 'Zone has created!');
         }catch(Exception $e){
             return back()->with('error', 'Something went wrong!');
         }

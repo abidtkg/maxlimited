@@ -14,7 +14,6 @@ return new class extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Product::class)->constrained();
             $table->decimal('total');
             $table->timestamps();
         });

@@ -1,10 +1,10 @@
 @extends('layouts.admin.master')
-@section('page-title', 'Purchases - Max Limited')
+@section('page-title', 'Products - Max Limited')
 @section('dashboard-content')
     <div class="row">
         <div class="col-12">
-            <a class="btn btn-info float-end" href="{{ route('admin.product.create') }}">
-                Add Product
+            <a class="btn btn-info float-end" href="{{ route('admin.purchase.create') }}">
+                Add Purchase
             </a>
         </div>
     </div>
@@ -13,23 +13,21 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">Stock</th>
-                        <th scope="col">Name</th>
+                        <th scope="col">#</th>
                         <th scope="col">Price</th>
                         <th scope="col">Date</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($products as $product)
+                    @foreach ($purcahses as $purcahse)
                         <tr>
-                            <th scope="row"> {{ $product->stock }} </th>
-                            <td> {{ $product->name }} ({{ $product->zone->name }}) </td>
-                            <td> {{ $product->price }} </td>
-                            <td> {{ date('d M Y', strtotime($product->created_at)) }} </td>
+                            <th scope="row"> {{ $purcahse->id }} </th>
+                            <td> {{ $purcahse->total }} </td>
+                            <td> {{ date('d M Y', strtotime($purcahse->created_at)) }} </td>
                             <td>
-                                <a href="{{ route('admin.product.edit', $product->id) }}" class="btn btn-info me-1">
-                                    <i class="ti ti-edit"></i>
+                                <a href="{{ route('admin.purchase.show', $purcahse->id) }}" class="btn btn-info me-1">
+                                    <i class="ti ti-eye"></i>
                                 </a>
                             </td>
                         </tr>
