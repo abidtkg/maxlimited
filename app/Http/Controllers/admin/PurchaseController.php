@@ -70,4 +70,17 @@ class PurchaseController extends Controller
         }
         return redirect()->route('admin.purchase.index')->with('success', 'Purchase recorded successfully!');
     }
+
+    public function delete($id)
+    {
+        $purchase = Purchase::findOrFail($id);
+
+        // Update the product quantity
+        foreach($purchase->products as $product) {
+            $product->decrement('stock', $product->pivot->quantity);
+        }
+
+        $purchase->delete();
+        return redirect()->route('admin.purchase.index')->with('success', 'Purchase deleted successfully!');
+    }
 }

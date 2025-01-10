@@ -12,7 +12,7 @@
             <div class="row mb-3">
                 <div class="col-md-6">
                     <label for="product" class="form-label">Select Product</label>
-                    <select id="product" class="form-select">
+                    <select id="product" class="form-select select-product">
                         <option value="" disabled selected>Choose a product</option>
                         @foreach($products as $product)
                             <option value="{{ $product->id }}" data-name="{{ $product->name }} ({{ $product->zone->name }})">{{ $product->name }} ({{ $product->zone->name }}) </option>
@@ -95,4 +95,12 @@
         });
     });
 </script>
+@endsection
+
+@section('page-js')
+    <script>
+        $(document).ready(function() {
+            $('.select-product').select2();
+        });
+    </script>
 @endsection

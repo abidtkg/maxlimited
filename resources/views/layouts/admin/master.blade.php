@@ -10,6 +10,7 @@
 
     <title> @yield('page-title') </title>
     <link rel="stylesheet" href="{{ asset('assets/admin/css/styles.min.css') }}" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     @yield('page-css');
 </head>
 
@@ -38,6 +39,8 @@
     <script src="{{ asset('assets/admin/js/app.min.js') }}"></script>
     <script src="{{ asset('assets/admin/libs/simplebar/dist/simplebar.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    @yield('page-js')
 
     @if (Session()->has('success'))
         <script>
@@ -52,7 +55,8 @@
         <script>
             Swal.fire(
                 '{{ session()->get('error') }}',
-                'success'
+                '',
+                'error'
             )
         </script>
     @endif

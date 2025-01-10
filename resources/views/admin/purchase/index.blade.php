@@ -13,7 +13,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
                         <th scope="col">Price</th>
                         <th scope="col">Date</th>
                         <th scope="col">Action</th>
@@ -22,12 +21,14 @@
                 <tbody>
                     @foreach ($purcahses as $purcahse)
                         <tr>
-                            <th scope="row"> {{ $purcahse->id }} </th>
                             <td> {{ $purcahse->total }} </td>
                             <td> {{ date('d M Y', strtotime($purcahse->created_at)) }} </td>
                             <td>
                                 <a href="{{ route('admin.purchase.show', $purcahse->id) }}" class="btn btn-info me-1">
                                     <i class="ti ti-eye"></i>
+                                </a>
+                                <a onclick="return confirm('Are you sure?')" href="{{ route('admin.purchase.delete', $purcahse->id) }}" class="btn btn-danger me-1">
+                                    <i class="ti ti-trash"></i>
                                 </a>
                             </td>
                         </tr>

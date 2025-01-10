@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\ExpenseController;
 use App\Http\Controllers\admin\FtpController;
 use App\Http\Controllers\admin\LocationController;
 use App\Http\Controllers\admin\NoticeController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\PackageController;
 use App\Http\Controllers\admin\PackageRequestController;
 use App\Http\Controllers\admin\ProductController;
@@ -158,6 +159,18 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::get('/purchase/create', [PurchaseController::class, 'create'])->name('purchase.create');
     Route::post('/purchase/store', [PurchaseController::class, 'store'])->name('purchase.store');
     Route::get('/purchase/view/{id}', [PurchaseController::class, 'show'])->name('purchase.show');
+    Route::get('/purchase/delete/{id}', [PurchaseController::class, 'delete'])->name('purchase.delete');
+
+    // ORDER MANAGEMENT
+    Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/order/create', [OrderController::class, 'create'])->name('order.create');
+    Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
+    Route::get('/order/view/{id}', [OrderController::class, 'show'])->name('order.show');
+    Route::get('/order/print/{id}', [OrderController::class, 'print'])->name('order.print');
+    Route::get('/order/delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
+    Route::get('/order/done/{id}', [OrderController::class, 'done'])->name('order.done');
+    // ORDER TRANSACTION
+    Route::post('/order/transaction/create', [OrderController::class, 'add_transaction'])->name('order.transaction.create');
 });
 
 // EMPLOYEE ROUTES
