@@ -17,8 +17,14 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::latest()->paginate(50);
-        return view('admin.order.index', compact('orders'));
+        $orders = Order::latest()
+        ->when(request('user_id'), fn($query) => $query->where('user_id', request('user_id')))
+        ->when(request('start_date'), fn($query) => $query->where('created_at', '>=', request('start_date')))
+        ->when(request('end_date'), fn($query) => $query->where('created_at', '<=', request('end_date')))
+        ->paginate(20);  // Or any number of records per page
+
+        $users = User::where('user_type', 'client')->get();
+        return view('admin.order.index', compact('orders', 'users'));
     }
 
     public function show($id)

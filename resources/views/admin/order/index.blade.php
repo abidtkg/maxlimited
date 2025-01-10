@@ -8,6 +8,33 @@
             </a>
         </div>
     </div>
+    {{-- add filter options --}}
+    <div class="row mt-3">
+        <div class="col-12">
+            <form action="{{ route('admin.order.index') }}" method="GET">
+                <div class="row">
+                    <div class="col-3">
+                        <select name="user_id" class="form-control">
+                            <option value="">Select User</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user->id }}" {{ request()->user_id == $user->id ? 'selected' : '' }}>
+                                    {{ $user->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <input type="datetime-local" name="start_date" class="form-control" value="{{ request()->start_date }}">
+                    </div>
+                    <div class="col-3">
+                        <input type="datetime-local" name="end_date" class="form-control" value="{{ request()->end_date }}">
+                    </div>
+                    <div class="col-3">
+                        <button type="submit" class="btn btn-primary">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     <div class="card w-100 mt-3">
         <div class="card-body p-4">
             <table class="table">
@@ -43,6 +70,11 @@
                     @endforeach
                 </tbody>
             </table>
+            @if($orders->hasPages())
+            <div class="pagination-wrapper">
+                {{ $orders->links('pagination::bootstrap-5') }}
+            </div>
+        @endif
         </div>
     </div>
 @endsection
