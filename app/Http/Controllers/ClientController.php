@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderProduct;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
 class ClientController extends Controller
@@ -117,6 +118,21 @@ class ClientController extends Controller
 
         // PROCESS TO GATEWAY IF BKASH
 
+        // SEND MESSAGE TO TELETGRAM
+        // UPDATE THE AUTH TOKEN
+        $URL = 'https://api.telegram.org/bot'. env('TELEGRAM_API_KEY') .'/sendMessage?parse_mode=HTML';
+
+        $headers = [
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json'
+        ];
+        $message = "Card order from " . auth()->user()->name . "\nOrder ID: " . $order->id . "\nTotal Amount: " . $order->payable . "\nPayment: " . $order->payment_mode;
+        $body = [
+            'chat_id' => '-1002287595455',
+            'text' => $message
+        ];
+
+        Http::withHeaders($headers)->post($URL, $body);
         return redirect()->route('client.order.index')->with('success', 'Order created successfully!');
     }
 
