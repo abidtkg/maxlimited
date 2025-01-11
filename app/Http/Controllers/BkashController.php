@@ -3,94 +3,87 @@
 namespace App\Http\Controllers;
 
 use App\Models\BkashGateway;
+use App\Models\BkashTransaction;
 use App\Models\BkashTransction;
 use App\Models\Invoice;
+use App\Models\Order;
+use App\Models\OrderTransaction;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use App\Http\Controllers\SMSController;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class BkashController extends Controller
 {
     public function get_auth_token(){
-        // Fetch the token record from the database
-        $gateways = BkashGateway::where('active', true)->get();
-        if(count($gateways) == 0) return view('web.error.500');
-        $gateway = $gateways[0];
-
-        // Check if the token exists and if it has expired (updated_at + 1 hour)
-        if (Carbon::parse($gateway->updated_at)->addHour()->isFuture()) {
-            // Token is still valid, return with all required data
-            return $gateway;
-        }
-
+        if (Cache::has('bkash_auth_token')) return Cache::get('bkash_auth_token');
         // UPDATE THE AUTH TOKEN
         $URL = env('BKASH_URL') . '/tokenized/checkout/token/refresh';
 
         $headers = [
             'Content-Type' => 'application/json',
             'accept' => 'application/json',
-            'username' => $gateway->username,
-            'password' => $gateway->password
+            'username' => env('BKASH_USERNAME'),
+            'password' =>  env('BKASH_PASSWORD')
         ];
 
         $body = [
-            'app_key' => $gateway->app_key,
-            'app_secret' => $gateway->app_secret_key,
-            'refresh_token' => $gateway->refresh_token
+            'app_key' => env('BKASH_APP_KEY'),
+            'app_secret' => env('BKASH_APP_SECRET'),
+            'refresh_token' => $this->get_refresh_token()
         ];
 
         try{
             $response = Http::withHeaders($headers)->post($URL, $body);
             if($response->successful()){
                 $bkash_token = $response->json();
-                $update_gateway = [
-                    'auth_token' => $bkash_token['id_token'],
-                    'refresh_token' => $bkash_token['refresh_token']
-                ];
-                BkashGateway::where('id', $gateway->id)->update($update_gateway);
-                $gateway_upated_data = BkashGateway::findOrFail($gateway->id);
-                return $gateway_upated_data;
+                $auth_token = $bkash_token['id_token'];
+                Cache::put('bkash_auth_token', $auth_token, 30);
+            }else {
+                return throw new HttpException(500, 'An internal server error occurred.');
             }
         }catch(Exception $e){
-            return '';
+            return throw new HttpException(500, 'An internal server error occurred.');
         }
     }
 
     public function init_bkash_payment($id)
     {
-        $invoice = Invoice::findOrFail($id);
+        $order = Order::findOrFail($id);
 
         // UPDATE THE AUTH TOKEN
         $URL = env('BKASH_URL') . '/tokenized/checkout/create';
 
-        // PAYMENT GATEWAY DATA
-        $gateway = $this->get_auth_token();
-
         $headers = [
-            'Authorization' => $gateway->auth_token,
-            'X-APP-Key' => $gateway->app_key,
+            'Authorization' => $this->get_auth_token(),
+            'X-APP-Key' => env('BKASH_APP_KEY'),
             'accept' => 'application/json',
             'Content-Type' => 'application/json'
         ];
 
+        $total_payment = round($order->payable + ($order->payable * 0.01), 2);
+
         $body = [
             'mode' => '0011',
-            'payerReference' => strval($invoice->user->phone),
-            'callbackURL' => env('APP_URL') . '/bill/bkash/verify',
+            'payerReference' => strval($order->user->phone),
+            'callbackURL' => env('APP_URL') . '/bkash/verify',
             'currency' => 'BDT',
-            'amount' => $invoice->total,
+            'amount' => $total_payment,
             'intent' => 'sale',
-            'merchantInvoiceNumber' => strval($invoice->id)
+            'merchantInvoiceNumber' => strval($order->id)
         ];
 
         try{
             $response = Http::withHeaders($headers)->post($URL, $body);
             if($response->successful()){
                 $payment_response = $response->json();
-                BkashTransction::create([
+                // return $payment_response;
+                BkashTransaction::create([
+                    'order_id' => $order->id,
                     'paymentID' => $payment_response['paymentID'],
                     'bkashURL' => $payment_response['bkashURL'],
                     'amount' => $payment_response['amount'],
@@ -100,73 +93,105 @@ class BkashController extends Controller
             }
         }catch(Exception $e){
             dd($e);
+            return throw new HttpException(500, 'An internal server error occurred.');
         }
     }
 
     public function verify_bkash_payment(Request $request)
     {
-        $payment_id = $request->query('paymentID');
+        $paymentID = $request->query('paymentID');
         $status = $request->query('status');
 
         // SUCCESS PROCESS
         if($status == 'success'){
-            $bkash_transaction = BkashTransction::where('paymentID', $payment_id)->first();
-            $gateway = BkashGateway::where('active', true)->first();
+            $bkash_transaction = BkashTransaction::where('paymentID', $paymentID)->first();
 
             // EXECUTE THE PAYMENT
             $headers = [
-                'Authorization' => $gateway->auth_token,
-                'X-APP-Key' => $gateway->app_key,
+                'Authorization' => $this->get_auth_token(),
+                'X-APP-Key' => env('BKASH_APP_KEY'),
                 'accept' => 'application/json',
                 'Content-Type' => 'application/json'
             ];
 
+
             $body = [
-                'paymentID' => $payment_id
+                'paymentID' => $paymentID
             ];
 
             $URL = env('BKASH_URL') . '/tokenized/checkout/execute';
 
+            $response = Http::withHeaders($headers)->post($URL, $body);
+            if($response->successful() == false) {
+                return $response;
+            }
+            
             try{
-                $response = Http::withHeaders($headers)->post($URL, $body);
-                if($response->successful()){
-                    $payment_response = $response->json();
-                    if($payment_response['statusCode'] == '0000'){
-                        BkashTransction::where('id', $bkash_transaction->id)->update(['verified' => true]);
+                $payment_response = $response->json();
+                if($payment_response['statusCode'] == '0000'){
+                    // UPDATE INVOICE INFO
+                    $order = Order::findOrFail($bkash_transaction->order_id);
+                    $order->update([
+                        'due' => 0,
+                    ]);
 
-                        // UPDATE INVOICE INFO
-                        $invoice = Invoice::where('id', $bkash_transaction->merchantInvoiceNumber)->first();
-                        $invoice->update(['status' => 'paid']);
 
-                        // UPDATE TRANSACTION RECORD
-                        Transaction::create([
-                            'invoice_id' => $invoice->id,
-                            'amount' => $invoice->total,
-                            'transaction_id' => $payment_response['trxID'],
-                            'payment_method' => $gateway->name
-                        ]);
+                    // UPDATE TRANSACTION RECORD
+                    OrderTransaction::create([
+                        'order_id' => $order->id,
+                        'gateway' => 'bkash_online',
+                        'transaction_id' => $payment_response['trxID'],
+                        'amount' => $order->payable,
+                        'verified' => true
+                    ]);
 
-                        // SEND SMS TO CLIENT
-                        $sms_service = new SMSController;
-                        $invoice_link = env('APP_URL') . '/'.'bill/' . $invoice->id;
-                        $message = 'Dear '. $invoice->user->name .',\nWe got your payment for invoice ID-' . $invoice->id . ' total of '. $invoice->total . ' TAKA.\nYour invoice has been marked as paid.\nSee invoice: ' . $invoice_link . '\n\nThank you!\nDL Soft.';
-                        $sms_service->send_sms($invoice->user->phone, $message);
-                        return redirect()->route('bill.view', $invoice->id);
-                    }else{
-                        dd($payment_response);
-                        return $payment_response['statusCode'];
-                    }
+                    return redirect()->route('client.order.view', $order->id);
                 }else{
-                    dd('http request errro');
-                    return view('web.error.500');
+                    throw new HttpException(500, 'Payment process failed, try again!');
                 }
             }catch(Exception $e){
-                dd($e);
-                return view('web.error.500');
+                throw new HttpException(500, 'Payment process failed, try again!');
             }
         }else if($status == 'failure') {
-            $bkash_transaction = BkashTransction::where('paymentID', $payment_id)->first();
-            return view('web.error.payment-failed', compact('bkash_transaction'));
+            throw new HttpException(500, 'Payment process failed, try again!');
+        }
+    }
+
+
+    public function get_refresh_token()
+    {
+        if (Cache::has('bkash_refresh_token')) return Cache::get('bkash_refresh_token');
+        // UPDATE THE REFRESH TOKEN
+        $URL = env('BKASH_URL') . '/tokenized/checkout/token/grant';
+
+        $headers = [
+            'Content-Type' => 'application/json',
+            'accept' => 'application/json',
+            'username' => env('BKASH_USERNAME'),
+            'password' => env('BKASH_PASSWORD')
+        ];
+
+        $body = [
+            'app_key' => env('BKASH_APP_KEY'),
+            'app_secret' => env('BKASH_APP_SECRET')
+        ];
+
+        try{
+            $response = Http::withHeaders($headers)->post($URL, $body);
+            if($response->successful()){
+                $bkash_token = $response->json();
+                Cache::put('bkash_refresh_token', $bkash_token['refresh_token'], now()->addDays(20));
+                return $bkash_token['refresh_token'];
+                // $update_gateway = [
+                //     'auth_token' => $bkash_token['id_token'],
+                //     'refresh_token' => $bkash_token['refresh_token'],
+                //     'active' => true
+                // ];
+            }else{
+                throw new HttpException(500, 'An internal server error occurred.');
+            }
+        }catch(Exception $e){
+            throw new HttpException(500, 'An internal server error occurred.');
         }
     }
 }

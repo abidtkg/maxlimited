@@ -13,6 +13,7 @@ use App\Http\Controllers\admin\PurchaseController;
 use App\Http\Controllers\admin\SliderController;
 use App\Http\Controllers\admin\TermsController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\BkashController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\employee\EmpDashboard;
@@ -48,6 +49,10 @@ Route::get('/privacy', [PagesController::class, 'privacy_policy'])->name('policy
 Route::get('/refund-policy', [PagesController::class, 'refund_policy'])->name('policy.refund');
 Route::get('/about', [PagesController::class, 'about'])->name('aboutus');
 Route::get('/free-wifi', [PagesController::class, 'free_wifi'])->name('web.freewifi');
+
+// BKASH GATEWAY
+Route::get('/bkash/pay/{id}', [BkashController::class, 'init_bkash_payment']);
+Route::get('/bkash/verify', [BkashController::class, 'verify_bkash_payment']);
 
 // CUSTOM FORM
 Route::get('/tv', [PagesController::class, 'custom_form_view'])->name('customform.create');

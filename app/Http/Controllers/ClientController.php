@@ -116,10 +116,7 @@ class ClientController extends Controller
            ]);
         }
 
-        // PROCESS TO GATEWAY IF BKASH
-
         // SEND MESSAGE TO TELETGRAM
-        // UPDATE THE AUTH TOKEN
         $URL = 'https://api.telegram.org/bot'. env('TELEGRAM_API_KEY') .'/sendMessage?parse_mode=HTML';
 
         $headers = [
@@ -133,6 +130,11 @@ class ClientController extends Controller
         ];
 
         Http::withHeaders($headers)->post($URL, $body);
+
+        // PROCESS TO GATEWAY IF BKASH
+        if($request->payment_method == 'bkash') {
+            return redirect()->to(env('APP_URL') . '/bkash/pay/' . $order->id);
+        }
         return redirect()->route('client.order.index')->with('success', 'Order created successfully!');
     }
 

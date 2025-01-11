@@ -19,6 +19,12 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->timestamps();
         });
+
+        Schema::create('cache', function ($table) {
+            $table->string('key')->unique();
+            $table->text('value');
+            $table->integer('expiration');
+        });
     }
 
     /**

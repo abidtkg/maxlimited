@@ -75,9 +75,9 @@
                             <td class="right">
                                 {{ $transaction->transaction_id }}
                             </td>
-                            <td class="right">
+                            {{-- <td class="right">
                                 {{ $transaction->collected->name }}
-                            </td>
+                            </td> --}}
                             <td class="right">
                                 <strong>{{ date('d M Y', strtotime($transaction->created_at)) }}</strong>
                             </td>
