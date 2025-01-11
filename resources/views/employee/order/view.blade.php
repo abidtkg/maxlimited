@@ -29,15 +29,9 @@
                 <div>Invoice Date: <b>{{ date('d M Y', strtotime($order->created_at)) }}</b> </div>
                 <div>Phone: {{ $order->user->phone }}</div>
                 <div>Invoice ID: <b>{{ $order->id }}</b>  </div>
-                <div class="mt-1">
-                    @if(!$order->rider)
-                    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add_rider">ADD RIDER</button>
-                    @endif
-                </div>
                 @if($order->rider)
                 <div class="text-danger">Rider Name: {{ $order->rider->name }}</div>
                 <div class="text-danger">Rider Phone: {{ $order->rider->phone }}</div>
-                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#add_rider">CHANGE RIDER</button>
                 @endif
                 </div>
             </div>
@@ -71,28 +65,28 @@
                 @if($order->due != 0)
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">ADD PAYMENT</button>
                 @endif
-                <table class="table table-bordered mt-2">
+                <table class="table table-bordered">
                     <tbody>
                         @foreach ($order->transaction as $transaction)
                         <tr>
                             <td class="left">
-                                {{ $transaction->gateway }}
+                                <strong>{{ $transaction->gateway }}</strong>
                             </td>
                             <td class="right">
-                                {{ $transaction->amount }} TK
+                                <strong>{{ $transaction->amount }} TK</strong>
                             </td>
                             <td class="right">
-                                {{ $transaction->transaction_id }}
+                                <strong>{{ $transaction->transaction_id }}</strong>
                             </td>
                             <td class="right">
-                                {{ $transaction->collected->name }}
+                                <strong>{{ $transaction->transaction_id }}</strong>
                             </td>
                             <td class="right">
                                 @if($transaction->verified == false)
-                                    <a onclick="return confirm('Are you sure?')" href="{{ route('admin.order.transaction.verify', $transaction->id) }}" class="btn btn-info btn-sm">Verify</a>
+                                <strong>Verification Pending</strong>
                                 @endif
-                                @if($transaction->verified == true)
-                                    Verified
+                                @if($transaction->verified == True)
+                                <strong>Verified</strong>
                                 @endif
                             </td>
                             <td class="right">
@@ -154,10 +148,7 @@
     <div class="card-footer">
         NOTE: This is computer generated invoice and does not require physical signature.
         <span class="float-end">
-            <a href="{{ route('admin.order.print', $order->id) }}" class="btn btn-dark" target="_blank">PRINT</a>
-            @if($order->status != 'done')
-            <a class="btn btn-info" onclick="return confirm('Are you sure?')" href="{{ route('admin.order.done', $order->id) }}" >MARK AS DONE</a>
-            @endif
+            <a href="{{ route('employee.order.print', $order->id) }}" class="btn btn-dark" target="_blank">PRINT</a>
         </span>
     </div>
 </div>
@@ -165,7 +156,7 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form action="{{ route('admin.order.transaction.create') }}" method="POST">
+        <form action="{{ route('employee.order.payment.create') }}" method="POST">
             @csrf
             <input type="hidden" name="order_id" value="{{ $order->id }}">
             <div class="modal-content">
@@ -185,6 +176,7 @@
                             <option value="bkash">Bkash</option>
                             <option value="rocket">Rocket</option>
                             <option value="nagad">Nagad</option>
+                            <option value="bank">Bank</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -199,37 +191,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="add_rider" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form action="{{ route('admin.order.add.rider') }}" method="POST">
-            @csrf
-            <input type="hidden" name="order_id" value="{{ $order->id }}">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add Rider</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="method" class="form-label">Select Rider / Assign Order</label>
-                        <select class="form-select" id="method" name="rider_id">
-                            @foreach ($riders as $rider)
-                                <option value="{{ $rider->id }}">{{ $rider->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">ADD RIDER</button>
                 </div>
             </div>
         </form>

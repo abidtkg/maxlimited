@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,6 +19,8 @@ return new class extends Migration
             $table->string('transaction_id');
             $table->decimal('amount');
             $table->string('note')->nullable();
+            $table->boolean('verified')->default(false);
+            $table->foreignId('collected_by')->nullable()->constrained('users');
             $table->timestamps();
         });
     }

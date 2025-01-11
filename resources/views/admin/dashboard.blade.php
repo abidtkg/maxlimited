@@ -42,6 +42,16 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-3">
+                <a href="{{ route('admin.order.transaction.handcash') }}">
+                    <div class="card bg-dark">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 text-white">Order Payment (Employees Hand)</h6>
+                            <h1 class="card-title text-white"> {{ number_format($cash_in_hand_balance) }} </h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 @endsection

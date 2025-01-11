@@ -63,6 +63,11 @@
                 <td>{{ $expense->user->name }}</td>
             </tr>
             @endforeach
+            <tr>
+                <td>Total</td>
+                <td>{{ $total_amount }}</td>
+                <td colspan="3"></td>
+            </tr>
         </tbody>
     </table>
 </body>

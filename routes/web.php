@@ -169,8 +169,11 @@ Route::prefix('admin')->name('admin.')->middleware('adminguard')->group(function
     Route::get('/order/print/{id}', [OrderController::class, 'print'])->name('order.print');
     Route::get('/order/delete/{id}', [OrderController::class, 'delete'])->name('order.delete');
     Route::get('/order/done/{id}', [OrderController::class, 'done'])->name('order.done');
+    Route::post('/order/add-rider', [OrderController::class, 'add_rider'])->name('order.add.rider');
     // ORDER TRANSACTION
     Route::post('/order/transaction/create', [OrderController::class, 'add_transaction'])->name('order.transaction.create');
+    Route::get('/order/transaction/verify/{id}', [OrderController::class, 'verify_transaction'])->name('order.transaction.verify');
+    Route::get('/order/transaction/cash-in-hand', [OrderController::class, 'cash_in_hand'])->name('order.transaction.handcash');
 });
 
 // EMPLOYEE ROUTES
@@ -181,6 +184,12 @@ Route::prefix('/employee')->name('employee.')->middleware([EmployeeGuard::class]
     Route::get('/expenses', [EmployeeExpenseController::class, 'index'])->name('expense.index');
     Route::get('/expense/create', [EmployeeExpenseController::class, 'create'])->name('expense.create');
     Route::post('/expense/store', [EmployeeExpenseController::class, 'store'])->name('expense.store');
+
+    // ORDER MANGEMENT
+    Route::get('/orders', [OrderController::class, 'employee_assigned_orders'])->name('order.index');
+    Route::get('/order/view/{id}', [OrderController::class, 'employee_order_view'])->name('order.view');
+    Route::post('/order/transaction/create', [OrderController::class, 'employee_payment_create'])->name('order.payment.create');
+    Route::get('/order/print/{id}', [OrderController::class, 'employee_print'])->name('order.print');
 });
 
 

@@ -10,7 +10,7 @@
             @csrf
             <div class="col-md-6">
                 <label for="expense_category_id" class="form-label">Category</label>
-                <select class="form-select @error('expense_category_id') is-invalid @enderror" name="expense_category_id" id="expense_category_id">
+                <select class="form-select select-category @error('expense_category_id') is-invalid @enderror" name="expense_category_id" id="expense_category_id">
                     <option value="" disabled selected>Select Category</option>
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}" {{ old('expense_category_id') == $category->id ? 'selected' : ''}} > {{ $category->name }} </option>
@@ -59,4 +59,11 @@
         </form>
     </div>
 </div>
+@endsection
+@section('page-js')
+    <script>
+        $(document).ready(function() {
+            $('.select-category').select2();
+        });
+    </script>
 @endsection

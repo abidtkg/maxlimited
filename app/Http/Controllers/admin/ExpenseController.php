@@ -24,7 +24,8 @@ class ExpenseController extends Controller
             return view('admin.expense.index', compact('expenses', 'categories', 'users'));
         } else {
             $expenses = $expenses->get();  // Get all results without pagination
-            return view('admin.expense.print', compact('expenses'));
+            $total_amount = $expenses->sum('amount');
+            return view('admin.expense.print', compact('expenses', 'total_amount'));
         }
     }
 

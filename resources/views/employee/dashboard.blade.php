@@ -42,6 +42,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="card bg-dark">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-white">Order Payments [in hand]</h6>
+                    <h1 class="card-title text-white"> {{ number_format($cash_in_hand_balance) }} </h1>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

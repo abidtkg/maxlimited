@@ -185,11 +185,11 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#" aria-expanded="false">
+                    <a class="sidebar-link {{ request()->routeIs('employee.order*') ? 'active' : '' }}" href="{{ route('employee.order.index') }}" aria-expanded="false">
                         <span>
-                            <i class="ti ti-layout-dashboard"></i>
+                            <i class="ti ti-arrow-down"></i>
                         </span>
-                        <span class="hide-menu">Sell</span>
+                        <span class="hide-menu">Orders</span>
                     </a>
                 </li>
                 <li class="sidebar-item">

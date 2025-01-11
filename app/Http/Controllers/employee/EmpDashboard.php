@@ -4,6 +4,8 @@ namespace App\Http\Controllers\employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\Expense;
+use App\Models\Order;
+use App\Models\OrderTransaction;
 use Illuminate\Http\Request;
 
 class EmpDashboard extends Controller
@@ -28,7 +30,8 @@ class EmpDashboard extends Controller
             ->where('created_at', '<', date('Y-m-01'))
             ->where('user_id', $user_id)  // Add user_id filter
             ->sum('amount');
+        $cash_in_hand_balance = OrderTransaction::where('collected_by', auth()->user()->id)->where('verified', false)->sum('amount');
         
-        return view('employee.dashboard', compact('todays_expenses', 'last_seven_days_expense', 'this_month_expense', 'last_month_expense'));
+        return view('employee.dashboard', compact('todays_expenses', 'last_seven_days_expense', 'this_month_expense', 'last_month_expense', 'cash_in_hand_balance'));
     }
 }

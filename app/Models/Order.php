@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
@@ -17,14 +18,6 @@ class Order extends Model
     }
 
     /**
-     * Get the rider associated with the order.
-     */
-    public function rider()
-    {
-        return $this->belongsTo(User::class, 'rider_id');
-    }
-
-    /**
      * Get the products associated with the order.
      */
     public function products(): HasMany
@@ -35,5 +28,10 @@ class Order extends Model
     public function transaction()
     {
         return $this->hasMany(OrderTransaction::class);
+    }
+
+    public function rider(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

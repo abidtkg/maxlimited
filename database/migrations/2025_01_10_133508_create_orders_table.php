@@ -21,7 +21,7 @@ return new class extends Migration
             $table->decimal('due');
             $table->decimal('payable');
             $table->string('status')->default('pending');
-            $table->foreignId('rider_id')->constrained('users')->onDelete('cascade')->nullable();
+            $table->foreignId('rider_id')->nullable()->constrained('users');
             $table->string('payment_method');
             $table->string('note')->nullable();
             $table->timestamp('delivered_at')->nullable();
