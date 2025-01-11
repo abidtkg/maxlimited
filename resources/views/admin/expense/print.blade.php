@@ -70,5 +70,11 @@
             </tr>
         </tbody>
     </table>
+    <div>
+        <center style="margin-top: 75px; float: left">
+            <div style="border-top: 2px solid black; width: 120px;"></div>
+            <p style="width: 120px;">Approved By</p>
+        </center>
+    </div>
 </body>
 </html>

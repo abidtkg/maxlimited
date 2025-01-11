@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\SellingZone;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.user.create');
+        $zones = SellingZone::latest()->get();
+        return view('admin.user.create', compact('zones'));
     }
 
     public function store(Request $request)
@@ -29,6 +31,7 @@ class UserController extends Controller
             'phone' => 'required|string|max:12',
             'address' => 'required|string|max:255',
             'password' => 'required|string|max:16|min:6',
+            'zone_id' => 'nullable|integer|exists:selling_zones,id',
             'role' => 'required|string|max:255'
         ]);
 
@@ -41,6 +44,7 @@ class UserController extends Controller
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'user_type' => $request->role,
+                'zone_id' => $request->zone_id ?? null,
                 'password' => $hashedPassword
             ]);
             return redirect()->route('admin.user.index')->with('success', 'User has created!');
@@ -52,7 +56,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        return view('admin.user.edit', compact('user'));
+        $zones = SellingZone::latest()->get();
+        return view('admin.user.edit', compact('user', 'zones'));
     }
 
     public function update(Request $request)
@@ -63,6 +68,7 @@ class UserController extends Controller
             'phone' => 'required|string|max:12',
             'address' => 'required|string|max:255',
             'role' => 'required|string|max:255',
+            'zone_id' => 'nullable|integer|exists:selling_zones,id',
             'password' => 'nullable|string|max:16|min:6'
         ]);
 
@@ -78,6 +84,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'address' => $request->address,
+                'zone_id' => $request->zone_id ?? null,
                 'user_type' => $request->role
             ]);
             return redirect()->route('admin.user.index')->with('success', 'User has updated!');

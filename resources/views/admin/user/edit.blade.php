@@ -65,6 +65,18 @@
                                 <span class="text-danger"> {{ $message }} </span>
                             @enderror
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="role" class="form-label">Zone (only for client)</label>
+                            <select class="form-select @error('zone_id') is-invalid @enderror" id="zone_id" name="zone_id" value="{{ old('zone_id') }}">
+                                <option value="">Select Zone (Only for client)</option>
+                                @foreach ($zones as $zone)
+                                    <option value="{{ $zone->id }}" {{ $user->zone_id == $zone->id ? 'selected' : '' }}>{{ $zone->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('role')
+                                <span class="text-danger"> {{ $message }} </span>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-primary">UPDATE</button>
                     </form>
                 </div>

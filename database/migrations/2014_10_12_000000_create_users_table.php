@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('user_type')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
+            $table->foreignId('zone_id')->nullable()->constrained('selling_zones');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

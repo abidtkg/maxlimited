@@ -13,11 +13,13 @@ use App\Http\Controllers\admin\PurchaseController;
 use App\Http\Controllers\admin\SliderController;
 use App\Http\Controllers\admin\TermsController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\employee\EmpDashboard;
 use App\Http\Controllers\employee\ExpenseController as EmployeeExpenseController;
 use App\Http\Controllers\web\HomePageController;
 use App\Http\Controllers\web\PagesController;
+use App\Http\Middleware\ClientGuard;
 use App\Http\Middleware\EmployeeGuard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -60,8 +62,10 @@ Route::get('/auth_land', function() {
     if (Auth::user()) {
         if (Auth::user()->user_type == 'admin') {
             return redirect()->route('admin.dashboard');
-        }else {
+        }else if(auth()->user()->user_type == 'employee') {
             return redirect()->route('employee.dashboard');
+        }else if(auth()->user()->user_type == 'client'){
+            return redirect()->route('client.dashboard');
         }
     }else {
         Auth::logout();
@@ -192,6 +196,16 @@ Route::prefix('/employee')->name('employee.')->middleware([EmployeeGuard::class]
     Route::get('/order/print/{id}', [OrderController::class, 'employee_print'])->name('order.print');
 });
 
+
+Route::prefix('/client')->name('client.')->middleware([ClientGuard::class])->group(function () {
+    Route::get('/dashboard', [ClientController::class, 'dashboard'])->name('dashboard');
+    
+    // ORDER PANEL
+    Route::get('/orders', [ClientController::class, 'orders'])->name('order.index');
+    Route::get('/order/place', [ClientController::class, 'create'])->name('order.place');
+    Route::post('/order/store', [ClientController::class, 'store'])->name('order.store');
+    Route::get('/order/view/{id}', [ClientController::class, 'view'])->name('order.view');
+});
 
 Auth::routes();
 

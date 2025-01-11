@@ -192,12 +192,34 @@
                         <span class="hide-menu">Orders</span>
                     </a>
                 </li>
+                @endif
+                @if(Auth::user()->user_type == 'client')
+                <li class="nav-small-cap">
+                    <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+                    <span class="hide-menu">CLIENT PANEL</span>
+                </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="#" aria-expanded="false">
+                    <a class="sidebar-link {{ request()->routeIs('client.dashboard*') ? 'active' : '' }}" href="{{ route('client.dashboard') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-layout-dashboard"></i>
                         </span>
-                        <span class="hide-menu">PaySlip</span>
+                        <span class="hide-menu">Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link {{ request()->routeIs('client.order.index') ? 'active' : '' }}" href="{{ route('client.order.index') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-archive"></i>
+                        </span>
+                        <span class="hide-menu">Orders</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link {{ request()->routeIs('client.order.place') ? 'active' : '' }}" href="{{ route('client.order.place') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-ticket"></i>
+                        </span>
+                        <span class="hide-menu">Order Card</span>
                     </a>
                 </li>
                 @endif
