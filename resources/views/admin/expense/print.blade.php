@@ -59,7 +59,7 @@
                 <td>{{ $expense->category->name }}</td>
                 <td>{{ $expense->amount }}</td>
                 <td>{{ $expense->note }}</td>
-                <td>{{ date('d M Y h:i A', strtotime($expense->created_at)) }}</td>
+                <td>{{ date('d M Y h:i A', strtotime($expense->date)) }}</td>
                 <td>{{ $expense->user->name }}</td>
             </tr>
             @endforeach

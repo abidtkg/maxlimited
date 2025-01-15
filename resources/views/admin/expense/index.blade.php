@@ -76,7 +76,7 @@
                         <tr>
                             <th scope="row"> {{ $expense->amount }} </th>
                             <td> {{ $expense->category->name }} </td>
-                            <td> {{ date('d M Y h:iA', strtotime($expense->created_at)) }} </td>
+                            <td> {{ date('d M Y h:iA', strtotime($expense->date)) }} </td>
                             <td> {{ $expense->user->name }} </td>
                             <td>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailmodal{{ $expense->id }}">

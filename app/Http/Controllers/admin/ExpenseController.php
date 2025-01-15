@@ -15,8 +15,8 @@ class ExpenseController extends Controller
         $expenses = Expense::latest()
         ->when(request('expense_category_id'), fn($query) => $query->where('expense_category_id', request('expense_category_id')))
         ->when(request('user_id'), fn($query) => $query->where('user_id', request('user_id')))
-        ->when(request('start_date'), fn($query) => $query->where('created_at', '>=', request('start_date')))
-        ->when(request('end_date'), fn($query) => $query->where('created_at', '<=', request('end_date')));
+        ->when(request('start_date'), fn($query) => $query->where('date', '>=', request('start_date')))
+        ->when(request('end_date'), fn($query) => $query->where('date', '<=', request('end_date')));
         if (request('print') !== 'yes') {
             $expenses = $expenses->paginate(50);
             $categories = ExpenseCategory::latest()->get();
@@ -43,7 +43,8 @@ class ExpenseController extends Controller
             'expense_category_id' => 'required|integer',
             'note' => 'nullable|string',
             'image' => 'nullable|file|mimes:jpeg,jpg,png',
-            'user_id' => 'required|integer'
+            'user_id' => 'required|integer',
+            'datetime' => 'required|date'
         ]);
 
         if(!is_dir(public_path('uploads/memo'))){
@@ -65,6 +66,7 @@ class ExpenseController extends Controller
                 'note' => $request->note,
                 'image' => $image_name,
                 'user_id' => $request->user_id,
+                'date' => $request->datetime
             ]);
             return redirect()->route('admin.expense.index')->with('success', 'Expense added successfully!');
         }catch(\Exception $e){

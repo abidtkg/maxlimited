@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(ExpenseCategory::class)->constrained();
             $table->string('note')->nullable();
             $table->string('image')->nullable();
+            $table->timestamp('date');
             $table->timestamps();
         });
     }
