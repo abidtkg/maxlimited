@@ -33,7 +33,8 @@ class ExpenseController extends Controller
     {
         $categories = ExpenseCategory::latest()->get();
         $users = User::whereIn('user_type', ['employee', 'admin'])->latest()->get();
-        return view('admin.expense.create', compact('categories', 'users'));
+        $loggedin_user = auth()->user();
+        return view('admin.expense.create', compact('categories', 'users', 'loggedin_user'));
     }
 
     public function store(Request $request)

@@ -25,7 +25,7 @@
                 <select class="form-select @error('user_id') is-invalid @enderror" name="user_id" id="user_id">
                     <option selected disabled>Select Employee</option>
                     @foreach ($users as $user)
-                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : ''}}> {{ $user->name }} </option>
+                        <option value="{{ $user->id }}" {{ $loggedin_user->id == $user->id ? 'selected' : '' }}> {{ $user->name }} </option>
                     @endforeach
                 </select>
                 @error('user_id')
