@@ -42,6 +42,7 @@ class ExpenseController extends Controller
             'expense_category_id' => 'required|integer',
             'note' => 'nullable|string',
             'image' => 'nullable|file|mimes:jpeg,jpg,png',
+            'datetime' => 'required|date'
         ]);
 
         if(!is_dir(public_path('uploads/memo'))){
@@ -63,6 +64,7 @@ class ExpenseController extends Controller
                 'note' => $request->note,
                 'image' => $image_name,
                 'user_id' => Auth::user()->id,
+                'date' => $request->datetime
             ]);
             return redirect()->route('employee.expense.index')->with('success', 'Expense added successfully!');
         }catch(\Exception $e){
