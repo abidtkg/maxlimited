@@ -12,12 +12,12 @@ class ExpenseController extends Controller
 {
     public function index()
     {
+        $user_id = auth()->user()->id;
         $expenses = Expense::latest()
         ->when(request('expense_category_id'), fn($query) => $query->where('expense_category_id', request('expense_category_id')))
-        ->when(request('user_id'), fn($query) => $query->where('user_id', request('user_id')))
         ->when(request('start_date'), fn($query) => $query->where('created_at', '>=', request('start_date')))
         ->when(request('end_date'), fn($query) => $query->where('created_at', '<=', request('end_date')))
-        ->where('user_id', auth()->id());  // Filter by the currently logged-in user's ID
+        ->where('user_id', $user_id);  // Filter by the currently logged-in user's ID
 
         if (request('print') !== 'yes') {
             $expenses = $expenses->paginate(50);
@@ -25,7 +25,8 @@ class ExpenseController extends Controller
             return view('employee.expense.index', compact('expenses', 'categories'));
         } else {
             $expenses = $expenses->get();  // Get all results without pagination
-            return view('admin.expense.print', compact('expenses'));
+            $total_amount = $expenses->where('user_id', $user_id)->sum('amount');
+            return view('admin.expense.print', compact('expenses', 'total_amount'));
         }
     }
 
