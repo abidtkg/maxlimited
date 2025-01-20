@@ -1,6 +1,10 @@
 @extends('layouts.admin.master')
 @section('page-title', 'Products - Max Limited')
 @section('dashboard-content')
+<p>
+    Orders
+    <a href="{{ route('employee.order.create') }}" class="btn btn-sm btn-info float-end">Add Order</a>
+</p>
 <div class="card w-100 mt-3">
     <div class="card-body p-4">
         <table class="table">

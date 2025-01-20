@@ -253,4 +253,85 @@ class OrderController extends Controller
         ->get();
         return view('admin.order.order-cash', compact('balances'));
     }
+
+    public function employee_order_create()
+    {
+        $users = User::where('user_type', 'client')->get();
+        $products = Product::latest()->get();
+        return view('employee.order.create', compact('users', 'products'));
+    }
+
+    public function store_emp_order(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'products' => 'required|array|min:1', // Ensure at least one product is selected
+            'total_product_price' => 'required|numeric',
+            'delivery_fee' => 'required|numeric',
+            'discount' => 'nullable|numeric',
+            'payable' => 'required|numeric',
+        ]);
+
+        // CHECK THE PRDODCCUT STOCK
+        $total_order_amount = $request->delivery_fee;
+        $cart_products = [];
+        foreach ($request->products as $product_raw) {
+            // Split the string into product_id and quantity
+            list($product_id, $qty) = explode('-', $product_raw);
+            $qty = intval($qty);
+            
+            // Fetch the product from the database
+            $product = Product::find($product_id);
+            if ($product) {
+                // Calculate the total amount for the product
+                $productTotal = $product->price * $qty;
+                $total_order_amount += $productTotal;
+
+                // IF PRODUCT IS OUT OF STOCK BREAK THE LOOP AND RETUN ERRR 
+                if ($product->stock < $qty) {
+                    return back()->with('error', 'Product is out of stock!');
+                }
+
+                array_push($cart_products, [
+                    'id' => $product->id,
+                    'quantity' => $qty,
+                    'total' => $productTotal,
+                ]);
+            }
+        }
+
+        // CREATE THE ORDER
+        $order = Order::create([
+            'user_id' => $request->user_id,
+            'total_product_price' => $request->total_product_price,
+            'delivery_fee' => $request->delivery_fee,
+            'discount' => $request->discount ?? 0,
+            'payable' => $total_order_amount - $request->discount ?? 0,
+            'due' => $total_order_amount - $request->discount ?? 0,
+            'payment_mode' => 'cash',
+            'rider_id' => auth()->user()->id,
+            'status' => 'pending',  // Set default status
+            'payment_method' => $request->payment_method ?? 'N/A',  // Add default or based on the request
+            'note' => $request->note ?? NULL,  // Add an optional note field
+        ]);
+
+        // UPDATE THE PRODUCT STOCK AND INSERT INTO THE PIVOT TABLE
+
+        foreach($cart_products as $cart_product) {
+           // Update the product stock
+           $product = Product::find($cart_product['id']);
+           $product->decrement('stock', $cart_product['quantity']);
+
+           // Insert into the purchase_products table (pivot table)
+           OrderProduct::create([
+               'order_id' => $order->id,
+               'product_id' => $product->id,
+               'quantity' => $cart_product['quantity'],
+               'total' => $cart_product['total'],
+           ]);
+        }
+
+        return redirect()->route('employee.order.index')->with('success', 'Order created successfully!');
+    }
 }

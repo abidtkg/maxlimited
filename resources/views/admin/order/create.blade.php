@@ -102,7 +102,8 @@
 
         const updateSummary = () => {
             // Update delivery fee based on total product price
-            const deliveryFee = totalProductPrice < 2000 ? 50 : 0;
+            // const deliveryFee = totalProductPrice < 2000 ? 50 : 0;
+            const deliveryFee = 0;
             const discount = parseFloat(document.getElementById('inputDiscount').value || 0);
             discountValue.textContent = discount.toFixed(2);
 

@@ -196,6 +196,8 @@ Route::prefix('/employee')->name('employee.')->middleware([EmployeeGuard::class]
 
     // ORDER MANGEMENT
     Route::get('/orders', [OrderController::class, 'employee_assigned_orders'])->name('order.index');
+    Route::get('/order/create', [OrderController::class, 'employee_order_create'])->name('order.create');
+    Route::post('/order/store', [OrderController::class, 'store_emp_order'])->name('order.store');
     Route::get('/order/view/{id}', [OrderController::class, 'employee_order_view'])->name('order.view');
     Route::post('/order/transaction/create', [OrderController::class, 'employee_payment_create'])->name('order.payment.create');
     Route::get('/order/print/{id}', [OrderController::class, 'employee_print'])->name('order.print');
